@@ -246,6 +246,7 @@ namespace InOutManagementSystem {
 			this->buttonDataView->TabIndex = 6;
 			this->buttonDataView->Text = L"î•ñ•\Ž¦";
 			this->buttonDataView->UseVisualStyleBackColor = true;
+			this->buttonDataView->Visible = false;
 			this->buttonDataView->Click += gcnew System::EventHandler(this, &GuiMain::buttonDataView_Click);
 			// 
 			// buttonEdit
@@ -641,6 +642,7 @@ namespace InOutManagementSystem {
 			this->pictureBoxOut->Size = System::Drawing::Size(14, 14);
 			this->pictureBoxOut->TabIndex = 1;
 			this->pictureBoxOut->TabStop = false;
+			this->pictureBoxOut->Visible = false;
 			// 
 			// pictureBoxIn
 			// 

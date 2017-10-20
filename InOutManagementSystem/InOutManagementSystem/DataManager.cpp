@@ -136,7 +136,6 @@ void DataManager::readFileData()
 	//ファイルのデータを格納するための変数を用意
 	vector<string> filedata;
 	//ファイルのデータを読み込んで用意した変数に格納する
-
 	filedata = file.readFileData(userId);
 
 	//読みこんだデータをメンバに適用させる
@@ -214,14 +213,23 @@ CardData* DataManager::makeDataForCard()
 	//今回使用する8セクター分のデータを格納するカードデータを用意
 	CardData* carddata = new CardData(9);
 
+	//idをカードのデータへ格納する
 	makeIdDataForCard(carddata);
+	//名前をカードのデータへ格納する
 	makeNameDataForCard(carddata);
+	//パスワードをカードのデータへ格納する
 	makePassDataForCard(carddata);
+	//電話番号をカードのデータへ格納する
 	makeTellDataForCard(carddata);
+	//誕生日をカードのデータへ格納する
 	makeBirthDataForCard(carddata);
+	//パラメータをカードのデータへ格納する
 	makeParameterDataForCard(carddata);
+	//住所をカードのデータへ格納する
 	makeAddressDataForCard(carddata);
+	//入館時間をカードのデータへ格納する
 	makeInTimeDataForCard(carddata);
+	//退館時間をカードのデータへ格納する
 	makeOutTimeDataForCard(carddata);
 
 	//作成した書き込みたいカードデータを返却する
@@ -260,10 +268,10 @@ void DataManager::makeNameDataForCard(CardData * card)
 	int len = strlen(firstname);
 	//苗字をカードのデータへセットする
 	setDataForCardData(card, DataMConstants.firstNameSectorNum, DataMConstants.firstNameBlockNum, DataMConstants.firstNameStartByteNum, (BYTE*)firstname, len);
-	//
+	//名前をバイト配列に直す
 	const char* lastname = userLastName.c_str();
 	len = strlen(lastname);
-	//
+	//名前をカードのデータをセットする
 	setDataForCardData(card, DataMConstants.lastNameSectorNum, DataMConstants.lastNameBlockNum, DataMConstants.lastNameStartByteNum, (BYTE*)lastname, len);
 }
 
@@ -277,9 +285,10 @@ void DataManager::makeNameDataForCard(CardData * card)
 */
 void DataManager::makePassDataForCard(CardData * card)
 {
+	//パスワードをバイト配列に直す
 	const char* pass = password.c_str();
 	int len = strlen(pass);
-
+	//パスワードをカードのデータにセットする
 	setDataForCardData(card, DataMConstants.passSectorNum, DataMConstants.passBlockNum, DataMConstants.passStartByteNum, (BYTE*)pass, len);
 }
 
@@ -293,9 +302,10 @@ void DataManager::makePassDataForCard(CardData * card)
 */
 void DataManager::makeTellDataForCard(CardData * card)
 {
+	//電話番号をバイト配列に
 	const char* tel = telNo.c_str();
 	int len = strlen(tel);
-
+	//電話番号をカードのデータにセットする
 	setDataForCardData(card, DataMConstants.tellSectorNum, DataMConstants.tellBlockNum, DataMConstants.tellStartByteNum, (BYTE*)tel, len);
 }
 
@@ -309,9 +319,10 @@ void DataManager::makeTellDataForCard(CardData * card)
 */
 void DataManager::makeBirthDataForCard(CardData * card)
 {
+	//誕生日をバイト配列に
 	char birth[4];
 	memcpy(birth, &birthday, sizeof(int));
-
+	//誕生日をカードのデータにセットする
 	setDataForCardData(card, DataMConstants.birthdaySectorNum, DataMConstants.birthdayBlockNum, DataMConstants.birthdayStartByteNum, (BYTE*)birth, sizeof(int));
 }
 
@@ -325,12 +336,13 @@ void DataManager::makeBirthDataForCard(CardData * card)
 */
 void DataManager::makeParameterDataForCard(CardData * card)
 {
+	//パラメータを一つにまとめてバイト配列に
 	char para[4];
 	para[0] = chara;
 	para[1] = auth;
 	para[2] = cast;
 	para[3] = group;
-
+	//パラメータをカードのデータにセットする
 	setDataForCardData(card, DataMConstants.parameterSectorNum, DataMConstants.parameterBlockNum, DataMConstants.parameterStartByteNum, (BYTE*)para, sizeof(int));
 }
 
@@ -344,17 +356,25 @@ void DataManager::makeParameterDataForCard(CardData * card)
 */
 void DataManager::makeAddressDataForCard(CardData * card)
 {
+	//住所をバイト配列に直す
 	const char* addr = address.c_str();
 	int len = strlen(addr);
 
+	//住所に割り当てられた2セクター分繰り返す
 	for (int i = 0; i < 2; i++) {
-		for (int j = 0; j < 3; j++) {
-			for (int k = 0; k < 16; k++) {
-				if (len > i * 48 + j * 16 + k) {
-					card->sector[2 + i]->RWBlock[j][k] = addr[i * 48 + j * 16 + k];
+		//セクター内のブロック数だけ繰り返す
+		for (int j = 0; j < SECTOR_BLOCK_NUM; j++) {
+			///ブロック内のバイト数分だけ繰り返す
+			for (int k = 0; k < BLOCK_BYTE; k++) {
+				//その位置が取得した住所の長さより短ければ
+				if (len > i * SECTOR_BLOCK_NUM * BLOCK_BYTE + j * BLOCK_BYTE + k) {
+					//その時のバイト配列の値を格納する
+					card->sector[DataMConstants.addressSectorNum + i]->RWBlock[j][k] = addr[i * SECTOR_BLOCK_NUM* BLOCK_BYTE + j * BLOCK_BYTE + k];
 				}
+				//長い時
 				else {
-					card->sector[2 + i]->RWBlock[j][k] = '\0';
+					//終端文字を格納する
+					card->sector[DataMConstants.addressSectorNum + i]->RWBlock[j][k] = '\0';
 				}
 			}
 		}
@@ -372,19 +392,23 @@ void DataManager::makeAddressDataForCard(CardData * card)
 */
 void DataManager::makeInTimeDataForCard(CardData * card)
 {
+	//入退館の年月をバイト配列へ直す
 	char tempbuf[sizeof(short)];
 	memcpy(tempbuf, &inoutYM, sizeof(short));
-	setDataForCardData(card, 4, 0, 0, (BYTE*)tempbuf, sizeof(short));
+	//カードのデータに
+	setDataForCardData(card, DataMConstants.inTimeSectorNum, DataMConstants.inTimeBlockNum, DataMConstants.inTimeStartByteNum, (BYTE*)tempbuf, sizeof(short));
 
+	//入館時間のデータの長さを取得する
 	int len = this->inTime.size();
+	//その長さ分だけ繰り返す
 	for (int i = 1; i < len + 1; i++) {
+		//上から順にその時間を取得する
 		short temp = inTime[i - 1];
+		//用意したバイト配列に直す
 		memcpy(tempbuf, &temp, sizeof(short));
-
-		setDataForCardData(card, i / 24 + 4, (i / 8) % 3, i * 2 % 16, (BYTE*)tempbuf, sizeof(short));
+		//入退時間のバイト配列をセットする(処理は最初の2バイト分は入退館の年月のため)
+		setDataForCardData(card, i / 24 + DataMConstants.inTimeSectorNum, (i / 8) % SECTOR_BLOCK_NUM, i * 2 % BLOCK_BYTE, (BYTE*)tempbuf, sizeof(short));
 	}
-
-
 }
 
 /*
@@ -397,34 +421,42 @@ void DataManager::makeInTimeDataForCard(CardData * card)
 */
 void DataManager::makeOutTimeDataForCard(CardData * card)
 {
-
+	//バイト配列を用意して入退館の年月をそのバイト配列に格納する
 	char tempbuf[sizeof(short)];
 	memcpy(tempbuf, &inoutYM, sizeof(short));
-	setDataForCardData(card, 6, 0, 0, (BYTE*)tempbuf, sizeof(short));
+	//そのデータを格納する
+	setDataForCardData(card, DataMConstants.inoutTimeSectorNum, DataMConstants.inoutTimeBlockNum, DataMConstants.inoutTimeStartByteNum, (BYTE*)tempbuf, sizeof(short));
 
+	//退館時間の長さを取得する
 	int len = this->outTime.size();
+	//退館時間の長さ分だけ繰り返す
 	for (int i = 1; i < len + 1; i++) {
+		//その位置の退館時間を取得する
 		short temp = outTime[i - 1];
 		memcpy(tempbuf, &temp, sizeof(short));
-
-		setDataForCardData(card, i / 24 + 6, (i / 8) % 3, i * 2 % 16, (BYTE*)tempbuf, sizeof(short));
+		//そのデータをカードのデータに格納する
+		setDataForCardData(card, i / 24 + DataMConstants.outTimeSectorNum, (i / 8) % 3, i * 2 % 16, (BYTE*)tempbuf, sizeof(short));
 	}
 }
 
 /*
-関数名
+関数名:setDataForCardData
+概要:第一引数に受け取ったカードのデータの引数の位置にデータを格納する
 引数:CardData* card カード
 	:int sector　セクター
 	:int block　ブロック
 	:int fromByte　何バイト目からか
 	:Byte* data　格納したいデータ
 	:int len 何バイト分か
+返却値:なし
+作成日:10月20日(金)
+作成者:成田修之
 */
 void DataManager::setDataForCardData(CardData * card, int sector, int block, int fromByte, BYTE * data, int dataLen)
 {
 	//引数のバイトから
 	for (int i = 0; i < dataLen; i++) {
-		//
+		//引数番目のセクター内で、引数のブロックの中の引数の値の位置から始まる位置にデータを格納していく
 		card->sector[sector]->RWBlock[block][fromByte + i] = data[i];
 	}
 }
@@ -466,7 +498,8 @@ void DataManager::applyData(CardData * carddata)
 */
 void DataManager::applyUserID(CardData * carddata)
 {
-	userId = (char*)carddata->sector[0]->RWBlock[0];
+	//ユーザーidを指定の格納された箇所から取得
+	userId = (char*)carddata->sector[DataMConstants.userIdSectorNum]->RWBlock[DataMConstants.userIdBlockNum];
 }
 
 /*
@@ -479,8 +512,10 @@ void DataManager::applyUserID(CardData * carddata)
 */
 void DataManager::applyUserName(CardData * carddata)
 {
-	userLastName = (char*)carddata->sector[0]->RWBlock[1];
-	userFirstName = (char*)carddata->sector[0]->RWBlock[2];
+	//苗字を指定の位置から取得する
+	userLastName = (char*)carddata->sector[DataMConstants.lastNameSectorNum]->RWBlock[DataMConstants.lastNameBlockNum];
+	//名前も同じく指定の位置から取得する
+	userFirstName = (char*)carddata->sector[DataMConstants.firstNameSectorNum]->RWBlock[DataMConstants.firstNameBlockNum];
 }
 
 /*
@@ -493,12 +528,13 @@ void DataManager::applyUserName(CardData * carddata)
 */
 void DataManager::applyPassword(CardData * carddata)
 {
-	password = (char*)carddata->sector[1]->RWBlock[0];
+	//パスワードを指定の位置から取得する
+	password = (char*)carddata->sector[DataMConstants.passSectorNum]->RWBlock[DataMConstants.passBlockNum];
 }
 
 /*
 関数名:applyTelNoData
-概要:カードから読み取ったパスワードを適用させる
+概要:カードから読み取った電話番号を適用させる
 引数:CardData カードのデータ
 返却値:無し
 作成日:10月19日(木)
@@ -506,7 +542,8 @@ void DataManager::applyPassword(CardData * carddata)
 */
 void DataManager::applyTelNoData(CardData * carddata)
 {
-	telNo = (char*)carddata->sector[1]->RWBlock[1];
+	//電話番号を指定の位置から取得して格納する
+	telNo = (char*)carddata->sector[DataMConstants.tellSectorNum]->RWBlock[DataMConstants.tellSectorNum];
 }
 
 /*
@@ -519,10 +556,14 @@ void DataManager::applyTelNoData(CardData * carddata)
 */
 void DataManager::applyBirthday(CardData * carddata)
 {
+	//誕生日を取得するバッファを用意する
 	char temp[sizeof(int)];
+	//intのサイズ分だけ繰り返す
 	for (int i = 0; i < sizeof(int); i++) {
-		temp[i] = carddata->sector[1]->RWBlock[2][i];
+		//格納された位置から取得していく
+		temp[i] = carddata->sector[DataMConstants.birthdaySectorNum]->RWBlock[DataMConstants.birthdayBlockNum][i];
 	}
+	//誕生日に取得したバイト配列を格納する
 	memcpy(&birthday, temp, sizeof(int));
 }
 
@@ -536,14 +577,21 @@ void DataManager::applyBirthday(CardData * carddata)
 */
 void DataManager::applyParameter(CardData * carddata)
 {
+	//パラメータを格納するバイト配列をパラメータ数の4バイト分用意する
 	char temp[4];
+	//パラメータの数だけ繰り返す
 	for (int i = 0; i < 4; i++) {
-		temp[i] = carddata->sector[1]->RWBlock[2][i + 4];
+		//指定の位置から順に取得していく
+		temp[i] = carddata->sector[DataMConstants.parameterSectorNum]->RWBlock[DataMConstants.parameterBlockNum][i + DataMConstants.parameterStartByteNum];
 	}
 
+	//位置バイト目の人物を取得する
 	chara = temp[0];
+	//2バイト目の権限を取得する
 	auth = temp[1];
+	//3バイト目の役職を取得する
 	cast = temp[2];
+	//4バイト目の所属を取得する
 	group = temp[3];
 }
 
@@ -557,14 +605,24 @@ void DataManager::applyParameter(CardData * carddata)
 */
 void DataManager::applyAddressData(CardData * carddata)
 {
-	char addr[96] = { 0x00 };
+	//2セクター分のバイト配列を用意する
+	char addr[SECTOR_BLOCK_NUM * BLOCK_BYTE * 2] = { 0x00 };
 
+	//セクター数分だけ繰り返す
 	for (int i = 0; i < 2; i++) {
-		for (int j = 0; j < 3; j++) {
+		//セクター内のブロック数だけ繰り返す
+		for (int j = 0; j < SECTOR_BLOCK_NUM; j++) {
+			//先頭が終端を示していなければ
 			if ('\0' != carddata->sector[i]->RWBlock[j]) {
-				for (int k = 0; k < 16; k++) {
+				//
+				for (int k = 0; k < BLOCK_BYTE; k++) {
+					//
 					addr[i * 48 + j * 16 + k] = (char)carddata->sector[i + 2]->RWBlock[j][k];
 				}
+			}
+			//
+			else {
+				break;
 			}
 		}
 	}

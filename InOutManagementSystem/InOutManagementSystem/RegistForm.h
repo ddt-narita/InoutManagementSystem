@@ -455,10 +455,20 @@ namespace InOutManagementSystem {
 			procedureregist->userFirstName = registConstant->StrToc_str(this->textBoxFirstName->Text);
 			//入力された電話番号を格納する
 			procedureregist->telNo = registConstant->StrToc_str(this->textBoxTel->Text);
+			if (procedureregist->telNo.length() > 11) {
+				throw std::exception("電話番号が不正です\nハイフンを入れず11桁までの半角で入力してください");
+			}
 			//入力された住所を格納する
 			procedureregist->address = registConstant->StrToc_str(this->textBoxAddress->Text);
+			if (procedureregist->address.length() > 96) {
+				throw std::exception("住所が長すぎます");
+			}
 			//パスワード入力欄に入力された値を入れる
 			procedureregist->password = registConstant->StrToc_str(this->textBoxPassword->Text);
+			if (procedureregist->password.length() < 4 || 16 < procedureregist->password.length()) {
+				throw std::exception("パスワードは半角で4文字以上16文字以下で入力してください");
+			}
+
 
 			//選択された生年月日を取得
 			DateTime date = dateTimePickerBirth->Value;
@@ -472,11 +482,11 @@ namespace InOutManagementSystem {
 			//一つにまとめて格納する
 			procedureregist->birthday = year * 10000 + month * 100 + day;
 
-			//所属を選択されたインデックスで格納する
+			//グループを選択されたインデックスで格納する
 			procedureregist->setGroup(comboBoxGroup->SelectedIndex);
 			//役職を選択されたインデックスで格納する
 			procedureregist->setCast(comboBoxCast->SelectedIndex);
-			//
+			//所属を選択されたインデックスで格納する
 			procedureregist->setAffli(comboBoxAffili->SelectedIndex);
 			//前から選ばれたインデックス番目のビットを立てる
 			procedureregist->setAuth(comboBoxAuth->SelectedIndex);
@@ -547,9 +557,10 @@ namespace InOutManagementSystem {
 //textBoxAddress->Text = "埼玉県所沢市上山口138-26"; 
 //textBoxTel->Text = "08013116165";
 
-			this->comboBoxAuth->SelectedIndex = 1;
+			this->comboBoxAuth->SelectedIndex = 0;
 			this->comboBoxCast->SelectedIndex = 0;
 			this->comboBoxGroup->SelectedIndex = 0;
+			this->comboBoxAffili->SelectedIndex = 0;
 			this->comboBoxCharacter->SelectedIndex = 0;
 		}
 };

@@ -97,19 +97,33 @@ void procedureInOut::setInOutTime()
 
 void procedureInOut::inoutCheck()
 {
+	//‘ÞŠÙ“ú”‚ª31“ú‚ð’´‚¦‚Ä‚¢‚é‚Æ‚«
+	if (outTime.size() >= 31) {
+		//—áŠO‚ð‘—o‚µ‚ÄŠÇ—ŽÒ‚É•ñ‚·‚é‚æ‚¤‚ÉŒx
+		throw std::exception(InoutConstant.MESSAGE_INOUT_OVER_ERROR.c_str());
+	}
+	//“o˜^Œã‰‚ß‚Ä‚ÌŽž
 	if (inTime.size() == 0) {
+		//‘ÞŠÙ‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚é
 		if (inout == INOUT::Out) {
+			//‘ÞŠÙƒGƒ‰[‚ð’Ê’m
 			throw std::exception(InoutConstant.MESSAGE_OUT_ERROR.c_str());
 		}
 	}
 
+	//“ü‘Þ‚Ç‚¿‚ç‚Ì
 	if (inTime.size() == outTime.size()) {
+		//
 		if (inout == INOUT::Out) {
+			//
 			throw exception(InoutConstant.MESSAGE_OUT_ERROR.c_str());
 		}
 	}
+	//
 	else if(inTime.size() > outTime.size()) {
+		//
 		if (inout == INOUT::In) {
+			//
 			throw exception(InoutConstant.MESSAGE_IN_ERROR.c_str());
 		}
 	}
