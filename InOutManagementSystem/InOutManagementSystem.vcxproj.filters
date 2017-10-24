@@ -54,6 +54,12 @@
     <ClCompile Include="PassCheckForm.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="InoutDay.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="InOutView.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GuiMain.h">
@@ -95,10 +101,16 @@
     <ClInclude Include="Cell.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="EditForm.h">
+    <ClInclude Include="PassCheckForm.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="PassCheckForm.h">
+    <ClInclude Include="InoutForm.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="InoutDay.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="InOutView.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
@@ -109,7 +121,10 @@
     <EmbeddedResource Include="RegistForm.resx">
       <Filter>リソース ファイル</Filter>
     </EmbeddedResource>
-    <EmbeddedResource Include="EditForm.resx">
+    <EmbeddedResource Include="PassCheckForm.resx">
+      <Filter>リソース ファイル</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InoutForm.resx">
       <Filter>リソース ファイル</Filter>
     </EmbeddedResource>
   </ItemGroup>

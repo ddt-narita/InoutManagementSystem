@@ -2,6 +2,7 @@
 #include <fstream>
 
 using namespace std;
+using namespace boost::property_tree;
 
 FileRW::FileRW()
 {
@@ -12,25 +13,39 @@ FileRW::~FileRW()
 {
 }
 
-void FileRW::writeData(string id, std::string data)
+void FileRW::writeData(std::string id, boost::property_tree::ptree tree)
 {
-	string filename = id + ".txt";
-	//出力ストリームを用意
-	ofstream ofs;
-	//idを文字列に変えてそのIDでファイルを開く
-	ofs.open(filename);
-
-	//オープンできなかったとき
-	if (!ofs) {
-		//メッセージを添えて例外を送出する
-		throw exception("データ保持用のファイルが開けませんでした。");
+	//json書き込みのtry catch
+	try {
+		//IDからファイル名を作成する
+		string filename = id + ".txt";
+		//作成したファイル名のファイルに受け取ったjsonデータを書き込む
+		write_json(filename, tree);
 	}
-	 
-	//ファイルに引数のデータを出力する
-	ofs << data;
-	//ファイルを閉じる
-	ofs.close();
+	//書き込みで例外が発生したとき
+	catch (...) {
+		//書き込みに失敗したことを例外で通知
+		throw exception("ファイルへのデータ書き込みができませんでした。");
+	}
+
 }
+
+void FileRW::readFileData(std::string id, boost::property_tree::ptree recvTree)
+{
+	//json読み込みのtry catch
+	try {
+		//引数のIDからファイル名を作成する
+		string filename = id + ".txt";
+		//ファイル名のファイルのjsonデータを引数のjsonオブジェクトで受け取る
+		read_json(filename, recvTree);
+	}
+	//json読み込みのtry catch
+	catch (...) {
+		//idのファイル読み込みができなかったことを通知
+		throw exception(("PC上のid: "+ id +"\nのファイルのデータが読み取れませんでした。").c_str());
+	}
+}
+
 
 /*
 関数名:readFileData

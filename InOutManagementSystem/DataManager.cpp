@@ -2,6 +2,7 @@
 #include <sstream>
 
 using namespace std;
+using namespace boost::property_tree;
 
 namespace {
 	Constants DataMConstants;
@@ -19,7 +20,7 @@ DataManager::DataManager()
 {
 	this->userId = "";
 	this->birthday = 0;
-	this->inoutYM = 0;
+	this->currentInout = 0;
 	this->userFirstName = "";
 	this->userLastName = "";
 	this->address = "";
@@ -28,6 +29,8 @@ DataManager::DataManager()
 	this->chara = 0;
 	this->auth = 0;
 	this->password = "";
+	this->inTime = vector<InoutDay>(31);
+	this->outTime = vector<InoutDay>(31);
 }
 
 /*
@@ -108,24 +111,11 @@ void DataManager::readCardData()
 }
 
 /*
-関数名:writeData
-概要:メンバのデータをカードとファイルへ書き込む
-引数:なし
-返却値:なし
-作成日:10月16日(月)
-作成者:成田修之
-*/
-void DataManager::writeData()
-{
-	//カード用にデータを変換してカードに書き込む
-	card.writeCard(makeDataForCard());
-	//ファイル用にデータを変換してカードに書き込む
-	file.writeData(userId, makeDataForFile());
-}
+
 
 /*
-関数名:
-概要:
+関数名:readFileData
+概要:ファイルからデータを読み取ってメンバに適用させる
 引数:なし
 返却値:なし
 作成日:10月16日(月)
@@ -133,13 +123,10 @@ void DataManager::writeData()
 */
 void DataManager::readFileData()
 {
-	//ファイルのデータを格納するための変数を用意
-	vector<string> filedata;
-	//ファイルのデータを読み込んで用意した変数に格納する
-	filedata = file.readFileData(userId);
-
+	//ファイルのデータを読み込んでメンバのファイル情報を保管する変数に格納
+	file.readFileData(userId, fileData);
 	//読みこんだデータをメンバに適用させる
-	applyFileData(filedata);
+	applyFileData(fileData);
 }
 
 /*
@@ -156,6 +143,22 @@ void DataManager::readCardId()
 	userId = card.readCardID();
 }
 
+//カードへと書き込む
+void DataManager::writeCard()
+{
+	//カードへと書き込むデータを作成して書き込む
+	card.writeCard(makeDataForCard());
+}
+
+//ファイル用のデータを作成(追加)してファイルへと書き込む
+void DataManager::writeFile()
+{
+	//ファイル用のデータを作成する
+	makeDataForFile();
+	//作成したデータをファイルへと書き込む
+	file.writeData(userId, fileData);
+}
+
 /*
 関数名:
 概要:
@@ -164,40 +167,75 @@ void DataManager::readCardId()
 作成日:10月16日(月)
 作成者:成田修之
 */
-std::string DataManager::makeDataForFile()
+void DataManager::makeDataForFile()
 {
-	//ファイルに書き込むためのストリームを確保
-	std::stringstream ss;
+	
 
-	//各情報を格納していく
-	ss << userId << endl;			// 1
-	ss << userLastName << endl;		// 3
-	ss << userFirstName << endl;
-	ss << password << endl;			// 10
-	ss << telNo << endl;			// 4
-	ss << birthday << endl;			// 2
-	ss << to_string(group) << endl;	// 6
-	ss << to_string(cast) << endl;	// 7
-	ss << to_string(chara) << endl;	// 8
-	ss << to_string(auth) << endl;
 
-	ss << address << endl;			// 5
-	ss << inoutYM << endl;			// 9
+}
 
-	//入退館時刻についても同じく配列部分繰り返して
-	for (int i = 0; i < inTime.size(); i++) {
-		//その時の配列の値を格納する
-		ss << inTime[i] << endl;
-	}
+/*
+関数名:applyFileData
+概要:メンバに取得したファイルのデータをほかのメンバに適用させる
+引数:property_tree fileData ファイルからのデータ
+返却値:無し
+作成日:10月24日(火)
+作成者:成田修之
+*/
+void DataManager::applyFileData(boost::property_tree::ptree fileData)
+{
+	//ユーザーIDを適用
+	userId = fileData.get_value("userId");
+	//苗字を適用
+	userLastName = fileData.get_value("userLastName");
+	//名前を適用
+	userFirstName = fileData.get_value("userFirstName");
+	//パスワードを適用
+	password = fileData.get_value("password");
+	//電話番号を適用
+	telNo = fileData.get_value("telNo");
+	//誕生日を数値に変換して格納する
+	birthday = stoi(fileData.get_value("birthday"));
+	//人物の値を数値に変えて適用
+	chara = stoi(fileData.get_value("character"));
+	//権限の値を数値に変えて適用
+	auth = stoi(fileData.get_value("auth"));
+	//役職の値を数値に変えて適用
+	cast = stoi(fileData.get_value("cast"));
+	//所属の値を数値に変えて適用
+	group = stoi(fileData.get_value("group"));
+	//住所を適用
+	address = fileData.get_value("address");
+	//カレントの入退館日の値を数値に変えて適用
+	currentInout = stoi(fileData.get_value("currentInout"));
 
-	ss << "end intime" << endl;
+}
 
-	for (int i = 0; i < outTime.size(); i++) {
-		ss << outTime[i] << endl;
-	}
+/*
+関数名:applyFileInData
+概要:メンバに取得したファイルの入館データをメンバに適用させる
+引数:property_tree fileData ファイルからのデータ
+返却値:無し
+作成日:10月24日(火)
+作成者:成田修之
+*/
+void DataManager::applyFileIndata(boost::property_tree::ptree fileData)
+{
+	ptree inData = fileData.get_child("in");
 
-	//ストリームを文字列に変えて返却する
-	return ss.str();
+
+}
+
+/*
+関数名:applyFileData
+概要:メンバに取得したファイルの退館データをメンバに適用させる
+引数:property_tree fileData ファイルからのデータ
+返却値:無し
+作成日:10月24日(火)
+作成者:成田修之
+*/
+void DataManager::applyFileOutdata(boost::property_tree::ptree fileData)
+{
 }
 
 /*
@@ -394,7 +432,7 @@ void DataManager::makeInTimeDataForCard(CardData * card)
 {
 	//入退館の年月をバイト配列へ直す
 	char tempbuf[sizeof(short)];
-	memcpy(tempbuf, &inoutYM, sizeof(short));
+	memcpy(tempbuf, &currentInout, sizeof(short));
 	//カードのデータに
 	setDataForCardData(card, DataMConstants.inTimeSectorNum, DataMConstants.inTimeBlockNum, DataMConstants.inTimeStartByteNum, (BYTE*)tempbuf, sizeof(short));
 
@@ -403,7 +441,7 @@ void DataManager::makeInTimeDataForCard(CardData * card)
 	//その長さ分だけ繰り返す
 	for (int i = 1; i < len + 1; i++) {
 		//上から順にその時間を取得する
-		short temp = inTime[i - 1];
+		short temp = inTime[i - 1].toSHRT();
 		//用意したバイト配列に直す
 		memcpy(tempbuf, &temp, sizeof(short));
 		//入退時間のバイト配列をセットする(処理は最初の2バイト分は入退館の年月のため)
@@ -423,7 +461,7 @@ void DataManager::makeOutTimeDataForCard(CardData * card)
 {
 	//バイト配列を用意して入退館の年月をそのバイト配列に格納する
 	char tempbuf[sizeof(short)];
-	memcpy(tempbuf, &inoutYM, sizeof(short));
+	memcpy(tempbuf, &currentInout, sizeof(short));
 	//そのデータを格納する
 	setDataForCardData(card, DataMConstants.inoutTimeSectorNum, DataMConstants.inoutTimeBlockNum, DataMConstants.inoutTimeStartByteNum, (BYTE*)tempbuf, sizeof(short));
 
@@ -432,7 +470,7 @@ void DataManager::makeOutTimeDataForCard(CardData * card)
 	//退館時間の長さ分だけ繰り返す
 	for (int i = 1; i < len + 1; i++) {
 		//その位置の退館時間を取得する
-		short temp = outTime[i - 1];
+		short temp = outTime[i - 1].toSHRT();
 		memcpy(tempbuf, &temp, sizeof(short));
 		//そのデータをカードのデータに格納する
 		setDataForCardData(card, i / 24 + DataMConstants.outTimeSectorNum, (i / 8) % 3, i * 2 % 16, (BYTE*)tempbuf, sizeof(short));
@@ -652,7 +690,7 @@ void DataManager::applyInoutYM(CardData * carddata)
 	temp[0] = carddata->sector[4]->RWBlock[0][0];
 	temp[1] = carddata->sector[4]->RWBlock[0][1];
 
-	memcpy(&inoutYM, temp, sizeof(short));
+	memcpy(&currentInout, temp, sizeof(short));
 }
 
 /*
@@ -665,22 +703,29 @@ void DataManager::applyInoutYM(CardData * carddata)
 */
 void DataManager::applyInTime(CardData * carddata)
 {
+	//short型の2バイト分を格納する変数を用意
 	char temp[sizeof(short)];
 
+	//入館に与えられた2セクター分繰り返す
 	for (int i = 0; i < 2; i++) {
-		for (int j = 0; j < 3; j++) {
-			for (int k = 0; k < 16; k += 2) {
+		//セクター内の3ブロック分繰り返す
+		for (int j = 0; j < SECTOR_BLOCK_NUM; j++) {
+			//ブロック内のバイト数分繰り返す
+			for (int k = 0; k < BLOCK_BYTE; k += 2) {
+				//一番最初でなければ(最初はカレントの年月が格納されている)
 				if (i != 0 || j != 0 || k != 0) {
+					//1バイト目を取得する
 					temp[0] = carddata->sector[i + 4]->RWBlock[j][k];
+					//2バイト目を取得する
 					temp[1] = carddata->sector[i + 4]->RWBlock[j][k + 1];
+					//どちらでも格納されている値が存在する
 					if (temp[0] != '\0' && temp[1] != '\0') {
+						//short型にする変数を用意
 						short dayintime;
+						//格納した2バイトをshort型変数にコピー
 						memcpy(&dayintime, temp, sizeof(short));
-
-						inTime.push_back(dayintime);
-					}
-					else {
-						return;
+						//short型の値を格納する
+						inTime[i * 24 + j * 8 + k].apply(dayintime);
 					}
 				}
 			}
@@ -698,23 +743,29 @@ void DataManager::applyInTime(CardData * carddata)
 */
 void DataManager::applyOutTime(CardData * carddata)
 {
+	//short型の2バイト分を格納する変数を用意
 	char temp[sizeof(short)];
 
+	//退館に与えられた2セクター分繰り返す
 	for (int i = 0; i < 2; i++) {
-		for (int j = 0; j < 3; j++) {
-			for (int k = 0; k < 16; k+=2) {
+		//セクター内の3ブロック分繰り返す
+		for (int j = 0; j < SECTOR_BLOCK_NUM; j++) {
+			//ブロック内のバイト数分繰り返す
+			for (int k = 0; k < BLOCK_BYTE; k += 2) {
+				//一番最初でなければ(最初はカレントの年月が格納されている)
 				if (i != 0 || j != 0 || k != 0) {
-					temp[0] = carddata->sector[i + 6]->RWBlock[j][k];
-					temp[1] = carddata->sector[i + 6]->RWBlock[j][k+1];
-
+					//1バイト目を取得する
+					temp[0] = carddata->sector[i + DataMConstants.outTimeSectorNum]->RWBlock[j][k];
+					//2バイト目を取得する
+					temp[1] = carddata->sector[i + DataMConstants.outTimeSectorNum]->RWBlock[j][k + 1];
+					//どちらでも格納されている値が存在する
 					if (temp[0] != '\0' && temp[1] != '\0') {
-						short dayouttime;
-						memcpy(&dayouttime, temp, sizeof(short));
-
-						outTime.push_back(dayouttime);
-					}
-					else {
-						return;
+						//short型にする変数を用意
+						short dayintime;
+						//格納した2バイトをshort型変数にコピー
+						memcpy(&dayintime, temp, sizeof(short));
+						//short型の値を格納する
+						outTime[i * 24 + j * 8 + k].apply(dayintime);
 					}
 				}
 			}
@@ -723,7 +774,7 @@ void DataManager::applyOutTime(CardData * carddata)
 }
 
 /*
-関数名:set
+関数名:setChara
 概要:人物のパラメータをコンボボックスの選ばれたインデックスでセットする
 引数:int select
 返却値:無し
@@ -908,7 +959,7 @@ int DataManager::getSelectedGroup()
 int DataManager::getInoutY()
 {
 	//
-	return inoutYM / 12;
+	return currentInout / 12;
 }
 
 /*
@@ -921,7 +972,7 @@ int DataManager::getInoutY()
 */
 int DataManager::getInoutM()
 {
-	int month = inoutYM % 12;
+	int month = currentInout % 12;
 	if (month == 0) {
 		month = 12;
 	}
@@ -930,51 +981,6 @@ int DataManager::getInoutM()
 	return month;
 }
 
-void DataManager::applyFileData(vector<string> fileData)
-{
-	//1行目をユーザーIDに
-	userId = fileData[0];
-	//2行目を誕生日に
-	userFirstName = fileData[1];
-	//3行目を名前に
-	userLastName = fileData[2];
-	//4行目を電話に
-	password = fileData[3];
-	//5行目を住所に
-	telNo = fileData[4];
-	//6行目を所属に
-	birthday = stoi(fileData[5]);
-	//7行目を役職に
-	group = stoi(fileData[6]);
-	//8行目を属性に
-	cast = stoi(fileData[7]);
-	//9行目を入退の年月に
-	chara = stoi(fileData[8]);
-	//10行目をパスワードに
-	auth = stoi(fileData[9]);
-	//住所を適用
-	address = fileData[10];
-	//入退館の年月を適用
-	inoutYM = stoi(fileData[11]);
-
-	int i;
-
-	//10行目から先をすべて
-	for (i = 12; i < fileData.size(); i++) {
-		if (fileData[i] == "end intime") {
-			i++;
-			break;
-		}
-		//メンバに後ろから追加していく
-		inTime.push_back(stoi(fileData[i]));
-	}
-
-	for (; i < fileData.size(); i++) {
-		outTime.push_back(stoi(fileData[i]));
-	}
-
-
-}
 
 void DataManager::clear()
 {

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "InoutDay.h"
 #include "procedureInOut.h"
 
 class ChainData
@@ -34,8 +35,8 @@ public:
 	void addUnder(ChainData* under);
 
 	//vectorの情報から行ごとの情報を作成する(入退の時間の配列を適用させる)
-	void applyVecData(std::vector<short> data);
+	void applyVecData(std::vector<InoutDay> data);
 	//vectorのデータを作製する
-	std::vector<int> makeDataForVec();
+	void makeDataForVec(std::vector<InoutDay> inoutdays);
 };
 

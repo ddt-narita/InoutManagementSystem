@@ -168,51 +168,41 @@ void ChainData::addUnder(ChainData * under)
 }
 
 //配列のデータから行の情報を作製する
-void ChainData::applyVecData(std::vector<short> data)
+void ChainData::applyVecData(std::vector<InoutDay> data)
 {
+	//自身をカレントとする
 	ChainData* current = this;
-
+	//配列のサイズ分だけ繰り返す
 	for (int i = 0; i < data.size(); i++) {
+		//カレントの下に追加する
 		current->addUnder(new ChainData());
+		//その追加した下のデータをカレントとする
 		current = current->under;
 
-
-
-		current->day = data[i] / 24 / 60;;
-		current->hour = (data[i] - (current->day *(24 * 60))) /60 ;
-		current->minute = (data[i]  - (current->day * 24 * 60) - (current->hour * 60));
+		//カレントの日にちをセットする
+		current->day = data[i].day;
+		//時間をセット
+		current->hour = data[i].hour;
+		//分をセット
+		current->minute = data[i].minute;
 	}
 }
 
 //配列の情報を作製する
-std::vector<int> ChainData::makeDataForVec()
+void ChainData::makeDataForVec(std::vector<InoutDay> inoutdays)
 {
-	//返却する入退のデータ
-	vector<int> inoutData;
-	//日ごと(行ごと)のデータ
-	int dayData;
-	//int分のデータをコピーするためのバイトの配列を用意
-	char tempbuf[sizeof(int)];
-
-	//下をカレントとする
+	//自身の下のデータが始まる位置をカレントとする
 	ChainData* current = this->under;
+	//カレントがナルか、引数の配列のサイズ分だけ繰り返す
+	for (int i = 0; i < inoutdays.size() && current != nullptr; i++) {
+		//
+		inoutdays.;
+		//
 
-	//カレントの行がナルになるまで繰り返す
-	while (nullptr != current) {
-		//1バイト目に入退どちらなのか
-		tempbuf[0] = current->inout;
-		//2バイト目には日付
-		tempbuf[1] = current->day;
-		//3バイト目には時
-		tempbuf[2] = current->hour;
-		//4バイト目には分を格納する
-		tempbuf[3] = current->minute;
+		//
 
-		//格納した4バイト分でintにメモリコピーしてintにする
-		memcpy(&dayData, tempbuf, sizeof(int));
-		//その値を配列の後ろへと追加していく
-		inoutData.push_back(dayData);
+		//
+
 	}
-	//
-	return inoutData;
+
 }

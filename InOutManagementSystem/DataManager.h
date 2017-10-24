@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "InoutDay.h"
 #include "CardRW.h"
 #include "FileRW.h"
 
@@ -20,10 +21,11 @@ public:
 	byte chara;
 	byte auth;
 	std::string address;
-	short inoutYM;
-	std::vector<short> inTime;
-	std::vector<short> outTime;
+	int currentInout;
+	std::vector<InoutDay> inTime;
+	std::vector<InoutDay> outTime;
 	
+	boost::property_tree::ptree fileData;
 
 	//
 	CardRW card;
@@ -41,15 +43,20 @@ public:
 	void checkCharacter();
 	//カードのデータを読み込む
 	void readCardData();
-	//データをカードとファイルへ書き込む
-	void writeData();
+
 	//ファイルのデータを読み込む
 	void readFileData();
 	//カードのIDのみ読み込む
 	void readCardId();
+
+	//カードへ前回までのデータの書き込みを行う
+	void writeCard();
+	//ファイルへ入退館のの処理まで終えた後メンバのデータを書き込む
+	void writeFile();
+
 	
-	//メンバのデータをファイルに書き込むように変換する
-	std::string makeDataForFile();
+
+	
 	//メンバのデータをカードに書き込むコマンドように変換する
 	CardData* makeDataForCard();
 	void makeIdDataForCard(CardData* card);
@@ -103,9 +110,15 @@ public:
 	//入退館の月を取得
 	int getInoutM();
 
+	//メンバのデータをファイルに書き込むように変換する
+	void makeDataForFile();
 	//受け取ったファイルのデータをメンバに適用させる
-	void applyFileData(std::vector<std::string> fileData);
-	
+	void applyFileData(boost::property_tree::ptree fileData);
+	//ファイルの入館のデータをメンバに適用させる
+	void applyFileIndata(boost::property_tree::ptree fileData);
+	//ファイルの退館のデータをメンバに適用させる
+	void applyFileOutdata(boost::property_tree::ptree fileData);
+
 	//カードリーダの開放などの後処理
 	void clear();
 };

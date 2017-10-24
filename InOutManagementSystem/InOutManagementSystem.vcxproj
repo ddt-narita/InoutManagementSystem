@@ -100,6 +100,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Users\lenovo\Downloads\boost_1_64_0\boost_1_64_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies />
@@ -139,6 +140,8 @@
     <ClCompile Include="EditForm.cpp" />
     <ClCompile Include="FileRW.cpp" />
     <ClCompile Include="GuiMain.cpp" />
+    <ClCompile Include="InoutDay.cpp" />
+    <ClCompile Include="InOutView.cpp" />
     <ClCompile Include="PassCheckForm.cpp" />
     <ClCompile Include="procedureInOut.cpp" />
     <ClCompile Include="procedureRegist.cpp" />
@@ -153,11 +156,15 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="DataGridSelfMade.h" />
     <ClInclude Include="DataManager.h" />
-    <ClInclude Include="EditForm.h">
+    <ClInclude Include="InoutDay.h" />
+    <ClInclude Include="InoutForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="FileRW.h" />
     <ClInclude Include="GuiMain.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="InOutView.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="PassCheckForm.h">
@@ -171,11 +178,14 @@
     <ClInclude Include="SectorData.h" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="EditForm.resx">
-      <DependentUpon>EditForm.h</DependentUpon>
+    <EmbeddedResource Include="InoutForm.resx">
+      <DependentUpon>InoutForm.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GuiMain.resx">
       <DependentUpon>GuiMain.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InOutView.resx">
+      <DependentUpon>InOutView.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PassCheckForm.resx">
       <DependentUpon>PassCheckForm.h</DependentUpon>
