@@ -44,8 +44,9 @@ namespace InOutManagementSystem {
 
 
 	private: System::Windows::Forms::TextBox^  textBoxAddress;
+	private: System::Windows::Forms::TextBox^  textBoxLastName;
 
-	private: System::Windows::Forms::TextBox^  textBoxName;
+
 	private: System::Windows::Forms::Label^  labelBirthDay;
 	private: System::Windows::Forms::Label^  labelTel;
 
@@ -53,12 +54,14 @@ namespace InOutManagementSystem {
 
 
 	private: System::Windows::Forms::Label^  labelAddress;
+	private: System::Windows::Forms::Label^  labelLastName;
 
-	private: System::Windows::Forms::Label^  labelName;
+
 	private: System::Windows::Forms::Label^  labelID;
 	private: System::Windows::Forms::TextBox^  textBoxID;
-	private: System::Windows::Forms::ComboBox^  comboBoxGroup;
-	private: System::Windows::Forms::Label^  labelGroup;
+	private: System::Windows::Forms::ComboBox^  comboBoxAffili;
+
+
 	private: System::Windows::Forms::ComboBox^  comboBoxCharacter;
 
 
@@ -76,6 +79,13 @@ namespace InOutManagementSystem {
 	private: System::Windows::Forms::Label^  labelAuthority;
 	private: System::Windows::Forms::TextBox^  textBoxPassword;
 	private: System::Windows::Forms::Label^  labelPassword;
+	private: System::Windows::Forms::TextBox^  textBoxFirstName;
+
+	private: System::Windows::Forms::Label^  labelFirstName;
+	private: System::Windows::Forms::Label^  labelGroup;
+
+	private: System::Windows::Forms::Label^  labelAffili;
+	private: System::Windows::Forms::ComboBox^  comboBoxGroup;
 
 
 
@@ -93,6 +103,11 @@ namespace InOutManagementSystem {
 		void InitializeComponent(void)
 		{
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->comboBoxGroup = (gcnew System::Windows::Forms::ComboBox());
+			this->labelGroup = (gcnew System::Windows::Forms::Label());
+			this->labelAffili = (gcnew System::Windows::Forms::Label());
+			this->textBoxFirstName = (gcnew System::Windows::Forms::TextBox());
+			this->labelFirstName = (gcnew System::Windows::Forms::Label());
 			this->textBoxPassword = (gcnew System::Windows::Forms::TextBox());
 			this->labelPassword = (gcnew System::Windows::Forms::Label());
 			this->comboBoxAuth = (gcnew System::Windows::Forms::ComboBox());
@@ -102,16 +117,15 @@ namespace InOutManagementSystem {
 			this->comboBoxCast = (gcnew System::Windows::Forms::ComboBox());
 			this->labelAttr = (gcnew System::Windows::Forms::Label());
 			this->labelCast = (gcnew System::Windows::Forms::Label());
-			this->labelGroup = (gcnew System::Windows::Forms::Label());
-			this->comboBoxGroup = (gcnew System::Windows::Forms::ComboBox());
+			this->comboBoxAffili = (gcnew System::Windows::Forms::ComboBox());
 			this->dateTimePickerBirth = (gcnew System::Windows::Forms::DateTimePicker());
 			this->textBoxTel = (gcnew System::Windows::Forms::TextBox());
 			this->textBoxAddress = (gcnew System::Windows::Forms::TextBox());
-			this->textBoxName = (gcnew System::Windows::Forms::TextBox());
+			this->textBoxLastName = (gcnew System::Windows::Forms::TextBox());
 			this->labelBirthDay = (gcnew System::Windows::Forms::Label());
 			this->labelTel = (gcnew System::Windows::Forms::Label());
 			this->labelAddress = (gcnew System::Windows::Forms::Label());
-			this->labelName = (gcnew System::Windows::Forms::Label());
+			this->labelLastName = (gcnew System::Windows::Forms::Label());
 			this->labelID = (gcnew System::Windows::Forms::Label());
 			this->textBoxID = (gcnew System::Windows::Forms::TextBox());
 			this->buttonCancel = (gcnew System::Windows::Forms::Button());
@@ -125,6 +139,11 @@ namespace InOutManagementSystem {
 				| System::Windows::Forms::AnchorStyles::Left)
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->panel1->AutoScroll = true;
+			this->panel1->Controls->Add(this->comboBoxGroup);
+			this->panel1->Controls->Add(this->labelGroup);
+			this->panel1->Controls->Add(this->labelAffili);
+			this->panel1->Controls->Add(this->textBoxFirstName);
+			this->panel1->Controls->Add(this->labelFirstName);
 			this->panel1->Controls->Add(this->textBoxPassword);
 			this->panel1->Controls->Add(this->labelPassword);
 			this->panel1->Controls->Add(this->comboBoxAuth);
@@ -134,29 +153,74 @@ namespace InOutManagementSystem {
 			this->panel1->Controls->Add(this->comboBoxCast);
 			this->panel1->Controls->Add(this->labelAttr);
 			this->panel1->Controls->Add(this->labelCast);
-			this->panel1->Controls->Add(this->labelGroup);
-			this->panel1->Controls->Add(this->comboBoxGroup);
+			this->panel1->Controls->Add(this->comboBoxAffili);
 			this->panel1->Controls->Add(this->dateTimePickerBirth);
 			this->panel1->Controls->Add(this->textBoxTel);
 			this->panel1->Controls->Add(this->textBoxAddress);
-			this->panel1->Controls->Add(this->textBoxName);
+			this->panel1->Controls->Add(this->textBoxLastName);
 			this->panel1->Controls->Add(this->labelBirthDay);
 			this->panel1->Controls->Add(this->labelTel);
 			this->panel1->Controls->Add(this->labelAddress);
-			this->panel1->Controls->Add(this->labelName);
+			this->panel1->Controls->Add(this->labelLastName);
 			this->panel1->Controls->Add(this->labelID);
 			this->panel1->Controls->Add(this->textBoxID);
 			this->panel1->Location = System::Drawing::Point(4, 71);
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(582, 352);
-			this->panel1->TabIndex = 0;
+			this->panel1->TabIndex = 2;
+			// 
+			// comboBoxGroup
+			// 
+			this->comboBoxGroup->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			this->comboBoxGroup->FormattingEnabled = true;
+			this->comboBoxGroup->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"第一グループ", L"第二グループ", L"第三グループ" });
+			this->comboBoxGroup->Location = System::Drawing::Point(370, 141);
+			this->comboBoxGroup->Name = L"comboBoxGroup";
+			this->comboBoxGroup->Size = System::Drawing::Size(121, 20);
+			this->comboBoxGroup->TabIndex = 8;
+			// 
+			// labelGroup
+			// 
+			this->labelGroup->AutoSize = true;
+			this->labelGroup->Location = System::Drawing::Point(317, 141);
+			this->labelGroup->Name = L"labelGroup";
+			this->labelGroup->Size = System::Drawing::Size(43, 12);
+			this->labelGroup->TabIndex = 24;
+			this->labelGroup->Text = L"グループ";
+			// 
+			// labelAffili
+			// 
+			this->labelAffili->AutoSize = true;
+			this->labelAffili->Location = System::Drawing::Point(317, 96);
+			this->labelAffili->Name = L"labelAffili";
+			this->labelAffili->Size = System::Drawing::Size(29, 12);
+			this->labelAffili->TabIndex = 23;
+			this->labelAffili->Text = L"所属";
+			// 
+			// textBoxFirstName
+			// 
+			this->textBoxFirstName->Location = System::Drawing::Point(67, 79);
+			this->textBoxFirstName->Name = L"textBoxFirstName";
+			this->textBoxFirstName->Size = System::Drawing::Size(147, 19);
+			this->textBoxFirstName->TabIndex = 2;
+			// 
+			// labelFirstName
+			// 
+			this->labelFirstName->AutoSize = true;
+			this->labelFirstName->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(128)));
+			this->labelFirstName->Location = System::Drawing::Point(14, 79);
+			this->labelFirstName->Name = L"labelFirstName";
+			this->labelFirstName->Size = System::Drawing::Size(37, 15);
+			this->labelFirstName->TabIndex = 21;
+			this->labelFirstName->Text = L"名前";
 			// 
 			// textBoxPassword
 			// 
 			this->textBoxPassword->Location = System::Drawing::Point(86, 289);
 			this->textBoxPassword->Name = L"textBoxPassword";
 			this->textBoxPassword->Size = System::Drawing::Size(141, 19);
-			this->textBoxPassword->TabIndex = 9;
+			this->textBoxPassword->TabIndex = 5;
 			// 
 			// labelPassword
 			// 
@@ -171,16 +235,16 @@ namespace InOutManagementSystem {
 			// 
 			this->comboBoxAuth->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->comboBoxAuth->FormattingEnabled = true;
-			this->comboBoxAuth->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"管理者", L"編集者", L"閲覧者" });
-			this->comboBoxAuth->Location = System::Drawing::Point(411, 187);
+			this->comboBoxAuth->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"閲覧者", L"管理者" });
+			this->comboBoxAuth->Location = System::Drawing::Point(405, 233);
 			this->comboBoxAuth->Name = L"comboBoxAuth";
 			this->comboBoxAuth->Size = System::Drawing::Size(121, 20);
-			this->comboBoxAuth->TabIndex = 18;
+			this->comboBoxAuth->TabIndex = 10;
 			// 
 			// labelCharacter
 			// 
 			this->labelCharacter->AutoSize = true;
-			this->labelCharacter->Location = System::Drawing::Point(359, 228);
+			this->labelCharacter->Location = System::Drawing::Point(353, 274);
 			this->labelCharacter->Name = L"labelCharacter";
 			this->labelCharacter->Size = System::Drawing::Size(29, 12);
 			this->labelCharacter->TabIndex = 19;
@@ -189,7 +253,7 @@ namespace InOutManagementSystem {
 			// labelAuthority
 			// 
 			this->labelAuthority->AutoSize = true;
-			this->labelAuthority->Location = System::Drawing::Point(359, 190);
+			this->labelAuthority->Location = System::Drawing::Point(353, 236);
 			this->labelAuthority->Name = L"labelAuthority";
 			this->labelAuthority->Size = System::Drawing::Size(29, 12);
 			this->labelAuthority->TabIndex = 17;
@@ -199,26 +263,26 @@ namespace InOutManagementSystem {
 			// 
 			this->comboBoxCharacter->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->comboBoxCharacter->FormattingEnabled = true;
-			this->comboBoxCharacter->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"無し", L"入館拒否", L"要注意人物" });
-			this->comboBoxCharacter->Location = System::Drawing::Point(411, 225);
+			this->comboBoxCharacter->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"一般", L"入館拒否", L"要注意人物" });
+			this->comboBoxCharacter->Location = System::Drawing::Point(405, 271);
 			this->comboBoxCharacter->Name = L"comboBoxCharacter";
 			this->comboBoxCharacter->Size = System::Drawing::Size(121, 20);
-			this->comboBoxCharacter->TabIndex = 20;
+			this->comboBoxCharacter->TabIndex = 11;
 			// 
 			// comboBoxCast
 			// 
 			this->comboBoxCast->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->comboBoxCast->FormattingEnabled = true;
-			this->comboBoxCast->Items->AddRange(gcnew cli::array< System::Object^  >(7) { L"第一", L"第二", L"第三", L"営業", L"事務", L"花", L"社長" });
-			this->comboBoxCast->Location = System::Drawing::Point(370, 141);
+			this->comboBoxCast->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"正社員", L"パート", L"部長" });
+			this->comboBoxCast->Location = System::Drawing::Point(370, 194);
 			this->comboBoxCast->Name = L"comboBoxCast";
 			this->comboBoxCast->Size = System::Drawing::Size(121, 20);
-			this->comboBoxCast->TabIndex = 15;
+			this->comboBoxCast->TabIndex = 9;
 			// 
 			// labelAttr
 			// 
 			this->labelAttr->AutoSize = true;
-			this->labelAttr->Location = System::Drawing::Point(315, 190);
+			this->labelAttr->Location = System::Drawing::Point(309, 236);
 			this->labelAttr->Name = L"labelAttr";
 			this->labelAttr->Size = System::Drawing::Size(29, 12);
 			this->labelAttr->TabIndex = 16;
@@ -227,47 +291,35 @@ namespace InOutManagementSystem {
 			// labelCast
 			// 
 			this->labelCast->AutoSize = true;
-			this->labelCast->Location = System::Drawing::Point(315, 144);
+			this->labelCast->Location = System::Drawing::Point(315, 197);
 			this->labelCast->Name = L"labelCast";
 			this->labelCast->Size = System::Drawing::Size(29, 12);
 			this->labelCast->TabIndex = 14;
 			this->labelCast->Text = L"役職";
 			// 
-			// labelGroup
+			// comboBoxAffili
 			// 
-			this->labelGroup->AutoSize = true;
-			this->labelGroup->Location = System::Drawing::Point(315, 97);
-			this->labelGroup->Name = L"labelGroup";
-			this->labelGroup->Size = System::Drawing::Size(29, 12);
-			this->labelGroup->TabIndex = 12;
-			this->labelGroup->Text = L"所属";
-			// 
-			// comboBoxGroup
-			// 
-			this->comboBoxGroup->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
-			this->comboBoxGroup->FormattingEnabled = true;
-			this->comboBoxGroup->Items->AddRange(gcnew cli::array< System::Object^  >(7) {
-				L"第一開発グループ", L"第二開発グループ", L"第三開発グループ", L"営業",
-					L"事務", L"花", L"社長"
-			});
-			this->comboBoxGroup->Location = System::Drawing::Point(370, 94);
-			this->comboBoxGroup->Name = L"comboBoxGroup";
-			this->comboBoxGroup->Size = System::Drawing::Size(121, 20);
-			this->comboBoxGroup->TabIndex = 13;
+			this->comboBoxAffili->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			this->comboBoxAffili->FormattingEnabled = true;
+			this->comboBoxAffili->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"営業", L"総務", L"開発" });
+			this->comboBoxAffili->Location = System::Drawing::Point(370, 93);
+			this->comboBoxAffili->Name = L"comboBoxAffili";
+			this->comboBoxAffili->Size = System::Drawing::Size(121, 20);
+			this->comboBoxAffili->TabIndex = 7;
 			// 
 			// dateTimePickerBirth
 			// 
 			this->dateTimePickerBirth->Location = System::Drawing::Point(361, 27);
 			this->dateTimePickerBirth->Name = L"dateTimePickerBirth";
 			this->dateTimePickerBirth->Size = System::Drawing::Size(200, 19);
-			this->dateTimePickerBirth->TabIndex = 11;
+			this->dateTimePickerBirth->TabIndex = 6;
 			// 
 			// textBoxTel
 			// 
 			this->textBoxTel->Location = System::Drawing::Point(83, 225);
 			this->textBoxTel->Name = L"textBoxTel";
 			this->textBoxTel->Size = System::Drawing::Size(144, 19);
-			this->textBoxTel->TabIndex = 7;
+			this->textBoxTel->TabIndex = 4;
 			// 
 			// textBoxAddress
 			// 
@@ -275,14 +327,14 @@ namespace InOutManagementSystem {
 			this->textBoxAddress->Multiline = true;
 			this->textBoxAddress->Name = L"textBoxAddress";
 			this->textBoxAddress->Size = System::Drawing::Size(248, 76);
-			this->textBoxAddress->TabIndex = 5;
+			this->textBoxAddress->TabIndex = 3;
 			// 
-			// textBoxName
+			// textBoxLastName
 			// 
-			this->textBoxName->Location = System::Drawing::Point(86, 73);
-			this->textBoxName->Name = L"textBoxName";
-			this->textBoxName->Size = System::Drawing::Size(144, 19);
-			this->textBoxName->TabIndex = 3;
+			this->textBoxLastName->Location = System::Drawing::Point(67, 54);
+			this->textBoxLastName->Name = L"textBoxLastName";
+			this->textBoxLastName->Size = System::Drawing::Size(147, 19);
+			this->textBoxLastName->TabIndex = 1;
 			// 
 			// labelBirthDay
 			// 
@@ -317,16 +369,16 @@ namespace InOutManagementSystem {
 			this->labelAddress->TabIndex = 4;
 			this->labelAddress->Text = L"住所";
 			// 
-			// labelName
+			// labelLastName
 			// 
-			this->labelName->AutoSize = true;
-			this->labelName->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->labelLastName->AutoSize = true;
+			this->labelLastName->Font = (gcnew System::Drawing::Font(L"MS UI Gothic", 11.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(128)));
-			this->labelName->Location = System::Drawing::Point(22, 76);
-			this->labelName->Name = L"labelName";
-			this->labelName->Size = System::Drawing::Size(37, 15);
-			this->labelName->TabIndex = 2;
-			this->labelName->Text = L"氏名";
+			this->labelLastName->Location = System::Drawing::Point(14, 54);
+			this->labelLastName->Name = L"labelLastName";
+			this->labelLastName->Size = System::Drawing::Size(37, 15);
+			this->labelLastName->TabIndex = 2;
+			this->labelLastName->Text = L"苗字";
 			// 
 			// labelID
 			// 
@@ -341,10 +393,10 @@ namespace InOutManagementSystem {
 			// 
 			// textBoxID
 			// 
-			this->textBoxID->Location = System::Drawing::Point(86, 29);
+			this->textBoxID->Location = System::Drawing::Point(67, 29);
 			this->textBoxID->Name = L"textBoxID";
-			this->textBoxID->Size = System::Drawing::Size(144, 19);
-			this->textBoxID->TabIndex = 1;
+			this->textBoxID->Size = System::Drawing::Size(147, 19);
+			this->textBoxID->TabIndex = 0;
 			// 
 			// buttonCancel
 			// 
@@ -352,7 +404,7 @@ namespace InOutManagementSystem {
 			this->buttonCancel->Location = System::Drawing::Point(470, 12);
 			this->buttonCancel->Name = L"buttonCancel";
 			this->buttonCancel->Size = System::Drawing::Size(95, 53);
-			this->buttonCancel->TabIndex = 0;
+			this->buttonCancel->TabIndex = 1;
 			this->buttonCancel->Text = L"Cancel";
 			this->buttonCancel->UseVisualStyleBackColor = true;
 			// 
@@ -361,7 +413,7 @@ namespace InOutManagementSystem {
 			this->buttonOK->Location = System::Drawing::Point(365, 12);
 			this->buttonOK->Name = L"buttonOK";
 			this->buttonOK->Size = System::Drawing::Size(95, 53);
-			this->buttonOK->TabIndex = 1;
+			this->buttonOK->TabIndex = 0;
 			this->buttonOK->Text = L"OK";
 			this->buttonOK->UseVisualStyleBackColor = true;
 			this->buttonOK->Click += gcnew System::EventHandler(this, &RegistForm::buttonOK_Click);
@@ -387,6 +439,46 @@ namespace InOutManagementSystem {
 #pragma endregion
 		Constants* registConstant;
 
+
+		bool isHarf(std::string input) {
+			std::string str = input;
+
+			while (!str.empty())
+			{
+				if (IsDBCSLeadByte(str[0]) == 0)
+				{
+					str.erase(0, 1);
+				}
+				else
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		bool isDisit(std::string str) {
+			try {
+
+				int temp = 0;
+				const char* chStr = str.c_str();
+				
+ 				for (int i = 0; i < str.length(); i++) {
+					char a = chStr[i];
+					std::string strtemp = &a;
+
+					temp = std::stoi(strtemp);
+				}
+
+			}
+			catch (...) {
+				return false;
+			}
+			return true;
+		}
+
+
 		/*
 		関数名:setData
 		概要:入力されているデータを格納する関数
@@ -397,15 +489,35 @@ namespace InOutManagementSystem {
 		*/
 		void setData(procedureRegist* procedureregist) {
 			//ユーザーのIDをメンバに保管
-			procedureregist->userId = INT32::Parse(this->textBoxID->Text);
+			procedureregist->userId = registConstant->StrToc_str(this->textBoxID->Text);
+			if (procedureregist->userId.length() > 16 || !isHarf(procedureregist->userId)) {
+				throw std::exception("IDが不正です。\n半角で16文字以内で入力してください。");
+			}
 			//入力されたユーザー名を格納する
-			procedureregist->userName = registConstant->StrToc_str(this->textBoxName->Text);
+			procedureregist->userLastName = registConstant->StrToc_str(this->textBoxLastName->Text);
+			if (procedureregist->userLastName.length() > 16) {
+				throw std::exception("苗字が長すぎます。");
+			}
+			procedureregist->userFirstName = registConstant->StrToc_str(this->textBoxFirstName->Text);
+			if (procedureregist->userFirstName.length() > 16) {
+				throw std::exception("名前が長すぎます。");
+			}
 			//入力された電話番号を格納する
 			procedureregist->telNo = registConstant->StrToc_str(this->textBoxTel->Text);
+			if (procedureregist->telNo.length() > 11 || !isDisit(procedureregist->telNo)) {
+				throw std::exception("電話番号が不正です\nハイフンを入れず11桁までの半角数値で入力してください");
+			}
 			//入力された住所を格納する
 			procedureregist->address = registConstant->StrToc_str(this->textBoxAddress->Text);
+			if (procedureregist->address.length() > 96) {
+				throw std::exception("住所が長すぎます");
+			}
 			//パスワード入力欄に入力された値を入れる
 			procedureregist->password = registConstant->StrToc_str(this->textBoxPassword->Text);
+			if (procedureregist->password.length() < 4 || 16 < procedureregist->password.length() || !isHarf(procedureregist->password)) {
+				throw std::exception("パスワードは半角で4文字以上16文字以下で入力してください");
+			}
+
 
 			//選択された生年月日を取得
 			DateTime date = dateTimePickerBirth->Value;
@@ -419,24 +531,16 @@ namespace InOutManagementSystem {
 			//一つにまとめて格納する
 			procedureregist->birthday = year * 10000 + month * 100 + day;
 
-			//所属を選択されたインデックスで格納する
-			procedureregist->group = comboBoxGroup->SelectedIndex;
+			//グループを選択されたインデックスで格納する
+			procedureregist->setGroup(comboBoxGroup->SelectedIndex);
 			//役職を選択されたインデックスで格納する
-			procedureregist->cast = comboBoxCast->SelectedIndex;
-			//属性を格納するための変数を用意
-			int attr = 0;
-			//きちんと選択されている
-			if (0 <= comboBoxAuth->SelectedIndex) {
-				//前から選ばれたインデックス番目のビットを立てる
-				attr = attr | (0x01 << (15 - comboBoxAuth->SelectedIndex));
-			}
-			//きちんと選択されている
-			if (0 <= comboBoxAuth->SelectedIndex) {
-				//2バイト目の前から選ばれたインデックス番目のビットを立てる
-				attr = attr | (0x01 << (7 - comboBoxCharacter->SelectedIndex));
-			}
-			//その属性値をメンバに格納する
-			procedureregist->attr = attr;
+			procedureregist->setCast(comboBoxCast->SelectedIndex);
+			//所属を選択されたインデックスで格納する
+			procedureregist->setAffli(comboBoxAffili->SelectedIndex);
+			//前から選ばれたインデックス番目のビットを立てる
+			procedureregist->setAuth(comboBoxAuth->SelectedIndex);
+			//2バイト目の前から選ばれたインデックス番目のビットを立てる
+			procedureregist->setChara(comboBoxCharacter->SelectedIndex);	
 		}
 
 	private:
@@ -502,9 +606,10 @@ namespace InOutManagementSystem {
 //textBoxAddress->Text = "埼玉県所沢市上山口138-26"; 
 //textBoxTel->Text = "08013116165";
 
-			this->comboBoxAuth->SelectedIndex = 2;
+			this->comboBoxAuth->SelectedIndex = 0;
 			this->comboBoxCast->SelectedIndex = 0;
 			this->comboBoxGroup->SelectedIndex = 0;
+			this->comboBoxAffili->SelectedIndex = 0;
 			this->comboBoxCharacter->SelectedIndex = 0;
 		}
 };

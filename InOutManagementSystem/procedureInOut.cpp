@@ -42,24 +42,14 @@ void procedureInOut::init()
 void procedureInOut::InOut()
 {
 	//カードからデータを取り出してメンバに保管
-	//DataManager::readCardData();
-	
-readCardId();
-	
-	
+	DataManager::readCardData();
 	//読みこんだカードのIDから判定を行う
 	DataManager::checkId();
-
-readFileData();
-
 	//人物のチェックを行う
 	DataManager::checkCharacter();
-	//入退館に関してのチェック
 	inoutCheck();
-
 	//現在時刻を入退館の時間としてセットする
 	setInOutTime();
-
 	//メンバのデータを書き込む
 	writeData();
 }
@@ -85,52 +75,58 @@ void procedureInOut::setInOutTime()
 	//セットされている月が読み込まれた日付の月と違う
 	if (getInoutM() != pnow->tm_mon + 1) {
 		//入退館の時間の配列をクリア
-		inoutTime.clear();
+		inTime.clear();
+		outTime.clear();
 		//今月の値をセットする
-		inoutYM = (pnow->tm_year + 1900) * 100 + (pnow->tm_mon + 1);
+		inoutYM = (pnow->tm_year + 1900) * 12 + (pnow->tm_mon) + 1;
+	}
+	//設定する時刻をセット
+	setNo = (pnow->tm_mday * 24 * 60) + (pnow->tm_hour * 60) + pnow->tm_min;
+	
+	//
+	if (inout == INOUT::In) {
+		//
+		DataManager::inTime.push_back(setNo);
+	}
+	else {
+		DataManager::outTime.push_back(setNo);
 	}
 
-	//1バイト目には入退どちらかを示す値を
-	charArraySizeInt[0] = this->inout;
-	//2バイト目には日付を
-	charArraySizeInt[1] = pnow->tm_mday;
-	//3バイト目には時間を
-	charArraySizeInt[2] = pnow->tm_hour;
-	//4バイト目には分を格納する
-	charArraySizeInt[3] = pnow->tm_min;
 
-	//作成した4バイト分の値を用意したintの変数にメモリコピーでセットする
-	memcpy(&setNo, charArraySizeInt, 4);
-
-	//作成した値をメンバの入退館時間としてセット
-	DataManager::inoutTime.push_back(setNo);
 }
 
 void procedureInOut::inoutCheck()
 {
-	//入退館が初めての時
-	if (inoutTime.size() < 1) {
-		//退館の時
+	//退館日数が31日を超えているとき
+	if (outTime.size() >= 31) {
+		//例外を送出して管理者に報告するように警告
+		throw std::exception(InoutConstant.MESSAGE_INOUT_OVER_ERROR.c_str());
+	}
+	//登録後初めての時
+	if (inTime.size() == 0) {
+		//退館しようとしている
 		if (inout == INOUT::Out) {
-			//入館されていないことを警告
+			//退館エラーを通知
+			throw std::exception(InoutConstant.MESSAGE_OUT_ERROR.c_str());
+		}
+	}
+
+	//入退どちらの
+	if (inTime.size() == outTime.size()) {
+		//
+		if (inout == INOUT::Out) {
+			//
 			throw exception(InoutConstant.MESSAGE_OUT_ERROR.c_str());
 		}
 	}
-	//初めてではないとき
-	else {
-		//最後のデータ
-		int lastData = inoutTime[inoutTime.size() - 1];
-		//intを格納するバイト配列を用意する
-		char lastDataByte[sizeof(int)];
-		//最後のデータをバイト配列にコピー
-		memcpy(lastDataByte, &lastData, sizeof(int));
-
-		//1バイト目の入退どちらかを表す値が今から行おうとしている処理(入/退どちらか)が同じになってしまうとき(入退同じこと連続でやろうとしたとき)
-		if (lastDataByte[0] == inout) {
-			//そのやろうとしている動作にあわせた例外のメッセージを作製
-			std::string message = (inout == INOUT::In) ? InoutConstant.MESSAGE_IN_ERROR : InoutConstant.MESSAGE_OUT_ERROR;
-			//メッセージを添えて例外を送出する
-			throw std::exception(message.c_str());
+	//
+	else if(inTime.size() > outTime.size()) {
+		//
+		if (inout == INOUT::In) {
+			//
+			throw exception(InoutConstant.MESSAGE_IN_ERROR.c_str());
 		}
 	}
+
 }
+

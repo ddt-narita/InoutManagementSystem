@@ -34,7 +34,7 @@ public:
 	void addUnder(ChainData* under);
 
 	//vectorの情報から行ごとの情報を作成する(入退の時間の配列を適用させる)
-	void applyVecData(std::vector<int> data);
+	void applyVecData(std::vector<short> data);
 	//vectorのデータを作製する
 	std::vector<int> makeDataForVec();
 };

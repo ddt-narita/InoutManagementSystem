@@ -142,23 +142,10 @@ Void narita::DataGridSelfMade::drawCell(int row, int col, Brush ^ color)
 	//セルの値を格納する変数を用意
 	String^ value;
 	//一列目についての時
-	if (col == 0) {
-		//列の値が0なら
-		if (rowData->getValue(col) == 0) {
-			//入館を示す“入”を
-			value = "入";
-		}
-		//0でない(1なら)
-		else {
-			//退館を示す"退"を格納する
-			value = "退";
-		}
-	}
-	//1列目以外なら
-	else {
+
 		//その列の値を格納する
-		value = rowData->getValue(col).ToString();
-	}
+		value = rowData->getValue(col + 1).ToString();
+
 	//セルの区切りの線を描く
 	graphic->DrawLine(cellFramePen, Point(col * cellWidth, row * cellHeight), Point(col * cellWidth, (row + 1) * cellHeight));
 	//四角形を引数の色で満たしておく

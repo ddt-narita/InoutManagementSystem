@@ -168,7 +168,7 @@ void ChainData::addUnder(ChainData * under)
 }
 
 //配列のデータから行の情報を作製する
-void ChainData::applyVecData(std::vector<int> data)
+void ChainData::applyVecData(std::vector<short> data)
 {
 	ChainData* current = this;
 
@@ -176,14 +176,11 @@ void ChainData::applyVecData(std::vector<int> data)
 		current->addUnder(new ChainData());
 		current = current->under;
 
-		char buf[4];
-		memcpy(buf, &data[i], sizeof(int));
 
-		current->inout = (buf[0] == 0 ? INOUT::In : INOUT::Out);
 
-		current->day = buf[1];
-		current->hour = buf[2];
-		current->minute = buf[3];
+		current->day = data[i] / 24 / 60;;
+		current->hour = (data[i] - (current->day *(24 * 60))) /60 ;
+		current->minute = (data[i]  - (current->day * 24 * 60) - (current->hour * 60));
 	}
 }
 

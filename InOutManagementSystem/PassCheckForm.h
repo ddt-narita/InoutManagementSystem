@@ -127,7 +127,7 @@ namespace InOutManagementSystem {
 		}
 #pragma endregion
 	public:
-		int id;
+		String^ id;
 		String^ name;
 		String^ password;
 		bool Judge;
@@ -135,7 +135,7 @@ namespace InOutManagementSystem {
 
 	private:
 		System::Void PassCheckForm_Load(System::Object^  sender, System::EventArgs^  e) {
-			labelID->Text = "ID:" + id.ToString();
+			labelID->Text = "ID:" + id;
 			labelName->Text = "–¼‘O:" + name;
 			Judge = false;
 		}

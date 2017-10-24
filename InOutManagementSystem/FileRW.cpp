@@ -12,9 +12,9 @@ FileRW::~FileRW()
 {
 }
 
-void FileRW::writeData(int id, std::string data)
+void FileRW::writeData(string id, std::string data)
 {
-	string filename = to_string(id) + ".txt";
+	string filename = id + ".txt";
 	//出力ストリームを用意
 	ofstream ofs;
 	//idを文字列に変えてそのIDでファイルを開く
@@ -41,11 +41,11 @@ void FileRW::writeData(int id, std::string data)
 作成日:10月18日(水)
 作成者:成田修之
 */
-vector<string> FileRW::readFileData(int id)
+vector<string> FileRW::readFileData(string id)
 {
 	vector<string> recvData;
 	//引数のidからファイル名を作製する
-	string fileName = to_string(id) + ".txt";
+	string fileName = id + ".txt";
 	//ファイルの入力ストリームを生成する
 	ifstream ifs;
 	//ファイル名でファイルを開く
@@ -65,16 +65,21 @@ vector<string> FileRW::readFileData(int id)
 	return recvData;
 }
 
-bool FileRW::checkId(int id)
+bool FileRW::checkId(string id)
 {
 	//判定用の変数
 	int judge = 0;
 	//引数のIDを文字列に変換
-	string filename = to_string(id) + ".txt";
+	string filename = id + ".txt";
 	//ファイル入力ストリームを生成
 	ifstream ifs;
 	//ファイルを開く
 	ifs.open(filename);
+
+	if (!ifs) {
+		judge = 0;
+		return false;
+	}
 
 	//判定用の変数
 	string check;

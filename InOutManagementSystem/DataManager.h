@@ -9,17 +9,21 @@
 class DataManager
 {
 public:
-	int userId;
-	int birthday;
-	std::string userName;
-	std::string telNo;
-	std::string address;
-	short group;
-	short cast;
-	short attr;
-	int inoutYM;
-	std::vector<int> inoutTime;
+	std::string userId;
+	std::string userFirstName;
+	std::string userLastName;
 	std::string password;
+	std::string telNo;
+	int birthday;
+	byte group;
+	byte cast;
+	byte chara;
+	byte auth;
+	std::string address;
+	short inoutYM;
+	std::vector<short> inTime;
+	std::vector<short> outTime;
+	
 
 	//
 	CardRW card;
@@ -48,35 +52,52 @@ public:
 	std::string makeDataForFile();
 	//メンバのデータをカードに書き込むコマンドように変換する
 	CardData* makeDataForCard();
-	BYTE* makeEleDataForCard(BYTE* block);
-	BYTE* makeTelDataForCard(BYTE* block);
-	BYTE* makeAddDataForCard(BYTE* block);
-	SectorData* makeUsernameForCard();
-	CardData* makeAddressForCard();
-	CardData* makeInoutDataForCard();
-	BYTE* makePasswordForCard(BYTE* block);
+	void makeIdDataForCard(CardData* card);
+	void makeNameDataForCard(CardData* card);
+	void makePassDataForCard(CardData* card);
+	void makeTellDataForCard(CardData* card);
+	void makeBirthDataForCard(CardData* card);
+	void makeParameterDataForCard(CardData* card);
+	void makeAddressDataForCard(CardData* card);
+	void makeInTimeDataForCard(CardData* card);
+	void makeOutTimeDataForCard(CardData* card);
 
-	//読みこんだデータをメンバに適用する
+
+	//セクターとブロック、ブロック内の何バイト目からかを決め、データの長さ分を格納する
+	void setDataForCardData(CardData* card, int sector, int block, int fromByte, BYTE* data, int dataLen);
+
+	////読みこんだデータをメンバに適用する
 	void applyData(CardData* carddata);
-	//基礎データを反映させる
-	void applyElementData(BYTE* element);
-	//電話番号
-	void applyTelNoData(BYTE* tel);
-	//追加情報を適用させる
-	void applyAddData(BYTE* addData);
-	//ユーザー名
-	void applyUserName(SectorData* nameData);
-	//住所
-	void applyAddressData(CardData* addressData);
-	//読みこんだデータを入退館時間の配列に直す
-	void applyInout(CardData* inoutData);
-	//パスワードを適用させる
-	void applyPassword(BYTE* passBlock);
+	////基礎データを反映させる
+	void applyUserID(CardData* carddata);
+	void applyUserName(CardData* carddata);
+	////パスワードを適用させる
+	void applyPassword(CardData* carddata);
+	////電話番号
+	void applyTelNoData(CardData* carddata);
+	void applyBirthday(CardData* carddata);
+	void applyParameter(CardData* carddata);
+	////住所
+	void applyAddressData(CardData* carddata);
+	void applyInoutYM(CardData* carddata);
+	////読みこんだデータを入退館時間の配列に直す
+	void applyInTime(CardData* carddata);
+	void applyOutTime(CardData* carddata);
+	
+	void setChara(int select);
+	void setAuth(int select);
+	void setCast(int select);
+	void setAffli(int select);
+	void setGroup(int select);
 
-	//属性から権限取得
-	int getAuthority();
-	//属性から人物取得
-	int getCharacter();
+	int getSelectedChara();
+	int getSelectedAuth();
+	int getSelectedCast();
+	int getSelectedAffli();
+	int getSelectedGroup();
+
+
+
 	//入退館の年を取得
 	int getInoutY();
 	//入退館の月を取得

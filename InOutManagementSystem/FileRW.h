@@ -9,9 +9,9 @@ public:
 	FileRW();
 	~FileRW();
 
-	void writeData(int id, std::string data);
-	std::vector<std::string> readFileData(int id);
-	bool checkId(int id);
+	void writeData(std::string id, std::string data);
+	std::vector<std::string> readFileData(std::string id);
+	bool checkId(std::string id);
 
 };
 
